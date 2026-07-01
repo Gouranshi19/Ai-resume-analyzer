@@ -11,16 +11,6 @@ Auth: JWT + Google SSO
 Database: To Be Finalized (PostgreSQL/MySQL)
 Deployment: Render (Backend), Vercel (Frontend)
 
-
-Team Members & Roles
-
-Gargeek Nama   → Team Lead, Frontend
-Ajay Singh     → Authentication
-Gouranshi      → Backend & AI Integration
-Anushka Goyal  → Backend & AI Integration
-Aashish Meena  → Database Management
-
-
 API Endpoints
 
 Auth
