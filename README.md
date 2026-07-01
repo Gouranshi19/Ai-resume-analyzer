@@ -10,7 +10,7 @@ An AI-powered resume analyzer that provides ATS scoring, keyword analysis, and i
 
 **AI:** Google Gemini API
 
-**Auth:** JWT + Google SSO
+**Auth:** JWT + Auth0 + Google SSO
 
 **Database:** To Be Finalized (PostgreSQL/MySQL)
 
