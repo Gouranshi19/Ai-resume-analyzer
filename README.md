@@ -14,7 +14,6 @@ An AI-powered resume analyzer that provides ATS scoring, keyword analysis, and i
 
 **Database:** To Be Finalized (PostgreSQL/MySQL)
 
-**Deployment:** Render (Backend), Vercel (Frontend)
 
 ---
 
