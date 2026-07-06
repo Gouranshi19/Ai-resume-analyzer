@@ -1,20 +1,15 @@
-from django.shortcuts import render
-
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import CurrentUserSerializer
+
 
 class CurrentUserView(APIView):
+    """
+    Endpoint to retrieve core profile info of the context authenticated user.
+    """
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        return Response({
-            'id': user.id,
-            'username': user.username,
-            'email': user.email,
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-        }, status=status.HTTP_200_OK)
+        serializer = CurrentUserSerializer(request.user)
+        return Response(serializer.data)
