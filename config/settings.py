@@ -82,10 +82,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
-]
+    ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+    WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database Configuration using environment variables with local fallbacks
@@ -98,7 +97,6 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
-}
 
 
 # Auth0 Credentials (Used by accounts.authentication)
@@ -133,7 +131,7 @@ USE_TZ = True
 # Static and Media Files configuration
 STATIC_URL = 'static/'
 
-AUTH_USER_MODEL = 'accounts.User'
+    AUTH_USER_MODEL = 'accounts.User'
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
