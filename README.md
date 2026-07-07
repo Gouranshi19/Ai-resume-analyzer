@@ -83,3 +83,52 @@ An AI-powered resume analyzer that provides ATS scoring, keyword analysis, and i
 - Resume History
 - Google SSO Login
 - User Dashboard
+
+
+## Backend Setup
+
+### 1. Clone
+
+git clone <repo>
+
+### 2. Go to backend
+
+cd backend
+
+### 3. Create virtual environment
+
+python -m venv venv
+
+### 4. Activate
+
+Windows
+
+venv\Scripts\activate
+
+Linux
+
+source venv/bin/activate
+
+### 5. Install packages
+
+pip install -r requirements.txt
+
+### 6. Copy
+
+.env.example
+
+to
+
+.env
+
+### 7. Configure PostgreSQL
+
+DB_NAME=cv_insight_db
+
+### 8. Run migrations
+
+python manage.py migrate
+
+### 9. Start server
+
+python manage.py runserver
