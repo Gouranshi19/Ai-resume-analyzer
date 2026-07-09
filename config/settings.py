@@ -98,7 +98,7 @@ DATABASES = {
         'HOST': os.getenv('DB_HOST', 'localhost'),
         'PORT': os.getenv('DB_PORT', '5432'),
     }
-
+}
 
 # Auth0 Credentials (Used by accounts.authentication)
 AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN', 'dev-kiloo1125bd5ycvu.us.auth0.com')
@@ -130,9 +130,9 @@ USE_TZ = True
 
 
 # Static and Media Files configuration
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
-    AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
