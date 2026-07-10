@@ -1,0 +1,4 @@
+﻿.step-card { position: relative; padding: 1.75rem; border-radius: 1rem; background: #fff; }
+.step-card > span { display: inline-block; margin-bottom: 2rem; color: #6366f1; font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+.step-card h3 { margin: 0 0 .6rem; color: #172033; font-size: 1.12rem; }
+.step-card p { margin: 0; color: #64748b; line-height: 1.65; }
