@@ -62,26 +62,14 @@ export default function Register() {
         navigate("/login");
 
         } catch (err) {
-
+    console.log("Status:", err.response?.status);
+    console.log("Response:", err.response?.data);
     console.error(err);
 
-    if (err.response?.data) {
-
-        console.log(err.response.data);
-
-        setError(JSON.stringify(err.response.data));
-
-    } else {
-
-        setError("Something went wrong.");
-
+    setError(
+        JSON.stringify(err.response?.data || err.message)
+    );
     }
-
-    } finally {
-
-        setLoading(false);
-
-        }
 
     };
 
