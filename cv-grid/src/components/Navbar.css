@@ -1,0 +1,69 @@
+.navbar{
+    width:100%;
+    border-bottom:2px solid #111;
+    background:#fff;
+}
+
+.nav-container{
+    width:92%;
+    max-width:1280px;
+    margin:auto;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:22px 0;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-box{
+    width:16px;
+    height:16px;
+    background:#ff4d1a;
+}
+
+.logo span{
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.8px;
+}
+
+.nav-links{
+    display:flex;
+    gap:38px;
+}
+
+.nav-links a{
+    font-size:13px;
+    font-weight:700;
+}
+
+.nav-links a:hover{
+    color:#ff4d1a;
+}
+
+.auth-buttons{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.auth-buttons a{
+    font-size:13px;
+    font-weight:700;
+}
+
+.auth-buttons button{
+    background:#111;
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    font-size:12px;
+    font-weight:700;
+}
