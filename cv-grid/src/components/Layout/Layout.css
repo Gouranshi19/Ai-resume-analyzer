@@ -1,0 +1,4 @@
+﻿.app-layout { min-height: 100vh; display: flex; flex-direction: column; }
+.app-layout__content { flex: 1; }
+.skip-link { position: fixed; z-index: 30; top: .75rem; left: 50%; padding: .65rem .9rem; color: #fff; background: #3730a3; border-radius: .5rem; transform: translate(-50%, -200%); transition: transform .2s ease; }
+.skip-link:focus { transform: translate(-50%, 0); }

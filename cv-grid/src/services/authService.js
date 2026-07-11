@@ -1,25 +1,38 @@
 import api from "./api";
 
-    export const loginUser = async (userData) => {
-    const response = await api.post("/auth/login/", userData);
-    return response.data;
-    };
+export const registerUser = async (data) => {
+  const response = await api.post("/auth/register/", data);
+  return response.data;
+};
 
-    export const registerUser = async (userData) => {
-    return await api.post("/auth/register/", userData);
-    };
+export const loginUser = async (data) => {
+  const response = await api.post("/auth/login/", data);
 
-    export const getCurrentUser = async (token) => {
-    const response = await api.get("/auth/me/", {
-        headers: {
-        Authorization: `Bearer ${token}`,
-        },
-    });
+  // Save JWT tokens after login
+  localStorage.setItem("access", response.data.access);
+  localStorage.setItem("refresh", response.data.refresh);
 
-    return response.data;
-    };
+  return response.data;
+};
 
-    export const logoutUser = () => {
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-    };
+export const getCurrentUser = async () => {
+  const response = await api.get("/auth/me/");
+  return response.data;
+};
+
+export const logoutUser = async () => {
+  const refresh = localStorage.getItem("refresh");
+
+  if (refresh) {
+    try {
+      await api.post("/auth/logout/", {
+        refresh,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+};
