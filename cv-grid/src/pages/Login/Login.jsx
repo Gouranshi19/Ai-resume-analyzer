@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import "./Login.css";
@@ -24,24 +24,21 @@ export default function Login() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        if (!formData.username || !formData.password) {
+    if (!formData.username || !formData.password) {
         setError("Please fill all fields.");
         return;
-        }
+    }
 
-        try {
+    try {
         setLoading(true);
 
-        const data = await loginUser(formData);
-
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
+        await loginUser(formData);
 
         navigate("/dashboard");
 
-        } catch (err) {
+    } catch (err) {
         console.error(err);
 
         if (err.response?.data?.detail) {
@@ -50,10 +47,10 @@ export default function Login() {
             setError("Login failed. Please try again.");
         }
 
-        } finally {
+    } finally {
         setLoading(false);
-        }
-    };
+    }
+};
 
     return (
         <div className="login-page">
