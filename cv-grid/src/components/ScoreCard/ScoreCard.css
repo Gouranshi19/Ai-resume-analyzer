@@ -1,9 +1,52 @@
-﻿.score-card { padding: 1rem; border: 1px solid #e9edf4; border-radius: .85rem; background: #fff; }
-.score-card > div:first-child { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
-.score-card span { color: #64748b; font-size: .78rem; font-weight: 600; }
-.score-card strong { color: #172033; font-size: 1.2rem; }
-.score-card small { color: #94a3b8; font-size: .7rem; }
-.score-card__track { height: .42rem; margin-top: .7rem; overflow: hidden; border-radius: 10px; background: #edf2f7; }
-.score-card__track span { display: block; height: 100%; border-radius: inherit; background: #3b82f6; }
-.score-card--violet .score-card__track span { background: #8b5cf6; }
-.score-card--teal .score-card__track span { background: #14b8a6; }
+﻿.dashboard-score-card{
+    padding:1rem;
+    border:1px solid #e9edf4;
+    border-radius:.85rem;
+    background:#fff;
+}
+
+.dashboard-score-card>div:first-child{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:.75rem;
+}
+
+.dashboard-score-card span{
+    color:#64748b;
+    font-size:.78rem;
+    font-weight:600;
+}
+
+.dashboard-score-card strong{
+    color:#172033;
+    font-size:1.2rem;
+}
+
+.dashboard-score-card small{
+    color:#94a3b8;
+    font-size:.7rem;
+}
+
+.dashboard-score-card__track{
+    height:.42rem;
+    margin-top:.7rem;
+    background:#edf2f7;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.dashboard-score-card__track span{
+    display:block;
+    height:100%;
+    border-radius:inherit;
+    background:#3b82f6;
+}
+
+.dashboard-score-card--violet .dashboard-score-card__track span{
+    background:#8b5cf6;
+}
+
+.dashboard-score-card--teal .dashboard-score-card__track span{
+    background:#14b8a6;
+}

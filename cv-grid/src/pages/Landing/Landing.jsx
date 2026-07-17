@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import "./Landing.css";
 
 export default function Landing() {
+    const navigate = useNavigate();
+
     return (
         <>
         <Navbar />
@@ -34,11 +37,17 @@ export default function Landing() {
 
                 <div className="hero-buttons">
 
-                <button className="primary-btn">
-                    UPLOAD CV →
+                <button
+                className="primary-btn"
+                onClick={() => navigate("/upload-resume")}
+                >
+                UPLOAD CV →
                 </button>
 
-                <button className="secondary-btn">
+                <button
+                    className="secondary-btn"
+                    onClick={() => navigate("/view-report")}
+                >
                     VIEW REPORT
                 </button>
 
@@ -50,7 +59,7 @@ export default function Landing() {
 
             <div className="hero-right">
 
-                <div className="score-card orange">
+                <div className="landing-score-card landing-orange">
 
                 <span>ATS</span>
 
@@ -58,7 +67,7 @@ export default function Landing() {
 
                 </div>
 
-                <div className="score-card">
+                <div className="landing-score-card">
 
                 <span>KEYWORD MATCH</span>
 
@@ -66,7 +75,7 @@ export default function Landing() {
 
                 </div>
 
-                <div className="score-card">
+                <div className="landing-score-card">
 
                 <span>PARSING</span>
 
@@ -74,7 +83,7 @@ export default function Landing() {
 
                 </div>
 
-                <div className="score-card black">
+                <div className="landing-score-card landing-black">
 
                 <span>RISK FLAGS</span>
 
@@ -86,7 +95,7 @@ export default function Landing() {
 
             </div>
 
-            <section className="method">
+            <section className="landing-method">
 
             <div className="container">
 
@@ -94,15 +103,15 @@ export default function Landing() {
                 02. METHOD
                 </p>
 
-                <h2 className="method-heading">
+                <h2 className="landing-method-heading">
                 THREE PASSES.
                 <br />
                 ONE READABLE RESULT.
                 </h2>
 
-                <div className="method-grid">
+                <div className="landing-method-grid">
 
-                <div className="method-card">
+                <div className="landing-method-card">
 
                     <span>01</span>
 
@@ -115,7 +124,7 @@ export default function Landing() {
 
                 </div>
 
-                <div className="method-card orange-card">
+                <div className="landing-method-card landing-orange-card">
 
                     <span>02</span>
 
@@ -128,7 +137,7 @@ export default function Landing() {
 
                 </div>
 
-                <div className="method-card">
+                <div className="landing-method-card">
 
                     <span>03</span>
 
@@ -169,7 +178,9 @@ export default function Landing() {
 
                 </div>
 
-                <button>
+                <button
+                onClick={() => navigate("/upload-resume")}
+                >
                 ANALYZE NOW →
                 </button>
 

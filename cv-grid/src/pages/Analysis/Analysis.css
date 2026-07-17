@@ -1,0 +1,58 @@
+.analysis-container{
+    max-width:900px;
+    margin:50px auto;
+    background:#fff;
+    border:2px solid #111;
+    border-radius:18px;
+    padding:40px;
+}
+
+.analysis-container h1{
+    font-size:38px;
+    font-weight:900;
+    margin-bottom:30px;
+}
+
+.analysis-container label{
+    display:block;
+    margin:18px 0 8px;
+    font-weight:700;
+}
+
+.analysis-container select,
+.analysis-container textarea{
+    width:100%;
+    padding:15px;
+    border:2px solid #111;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.analysis-container textarea{
+    resize:vertical;
+    min-height:220px;
+}
+
+.analysis-container select:focus,
+.analysis-container textarea:focus{
+    border-color:#ff4d1a;
+}
+
+.analysis-container button{
+    margin-top:25px;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#111;
+    color:white;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.analysis-container button:hover{
+    background:#ff4d1a;
+}

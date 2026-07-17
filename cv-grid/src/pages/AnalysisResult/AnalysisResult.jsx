@@ -1,93 +1,111 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
-import { getAnalysis } from "../../services/analysisService";
-
-import "../SystemPages.css";
+import { useParams, useNavigate } from "react-router-dom";
+import { getAnalysisDetail } from "../../services/analysisService";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import "./AnalysisResult.css";
 
 function AnalysisResult() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const { id } = useParams();
+  const [analysis, setAnalysis] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const [analysis, setAnalysis] = useState(null);
+  useEffect(() => {
+    loadAnalysis();
+  }, []);
 
-    useEffect(() => {
-        loadAnalysis();
-    }, []);
-
-    const loadAnalysis = async () => {
-
-        try {
-
-            const data = await getAnalysis(id);
-
-            setAnalysis(data);
-
-        } catch (err) {
-
-            console.log(err);
-
-        }
-
-    };
-
-    if (!analysis) {
-
-        return <h2>Loading...</h2>;
-
+  const loadAnalysis = async () => {
+    try {
+      const data = await getAnalysisDetail(id);
+      setAnalysis(data);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load analysis.");
+    } finally {
+      setLoading(false);
     }
+  };
 
+  if (loading) {
     return (
+      <div className="dashboard-layout">
+        <Sidebar />
+        <div className="analysis-result-container">
+          <h2>Loading...</h2>
+        </div>
+      </div>
+    );
+  }
 
-        <div className="system-content">
+  return (
+    <div className="dashboard-layout">
+      <Sidebar />
 
-            <h1>Analysis Result</h1>
+      <div className="analysis-result-container">
 
-            <br />
+        <div className="page-header">
+          <div>
+            <p className="page-kicker">AI ANALYSIS REPORT</p>
+            <h1>Resume Analysis Result</h1>
+          </div>
 
-            <h2>
-                ATS Score :
-                {" "}
-                {analysis.ats_score}%
-            </h2>
+          <button
+            className="primary-btn"
+            onClick={() => navigate("/analysis")}
+          >
+            Analyze Another Resume
+          </button>
+        </div>
 
-            <br />
+        <div className="analysis-score-card">
+          <p>ATS SCORE</p>
+          <h2>{analysis.ats_score.toFixed(2)}%</h2>
+        </div>
 
-            <h2>Matched Keywords</h2>
+        <div className="keyword-grid">
+
+          <div className="keyword-card">
+            <h3>Matched Keywords</h3>
 
             <ul>
-
-                {analysis.matched_keywords.map((item, index) => (
-
-                    <li key={index}>{item}</li>
-
-                ))}
-
+              {analysis.matched_keywords.length === 0 ? (
+                <li>No matched keywords.</li>
+              ) : (
+                analysis.matched_keywords.map((item, index) => (
+                  <li key={index}>✅ {item}</li>
+                ))
+              )}
             </ul>
 
-            <br />
+          </div>
 
-            <h2>Missing Keywords</h2>
+          <div className="keyword-card">
+            <h3>Missing Keywords</h3>
 
             <ul>
-
-                {analysis.missing_keywords.map((item, index) => (
-
-                    <li key={index}>{item}</li>
-
-                ))}
-
+              {analysis.missing_keywords.length === 0 ? (
+                <li>No missing keywords.</li>
+              ) : (
+                analysis.missing_keywords.map((item, index) => (
+                  <li key={index}>❌ {item}</li>
+                ))
+              )}
             </ul>
 
-            <br />
-
-            <h2>AI Suggestions</h2>
-
-            <p>{analysis.ai_suggestions}</p>
+          </div>
 
         </div>
 
-    );
+        <div className="ai-card">
+          <h3>AI Suggestions</h3>
+
+          <p>{analysis.ai_suggestions}</p>
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
 export default AnalysisResult;

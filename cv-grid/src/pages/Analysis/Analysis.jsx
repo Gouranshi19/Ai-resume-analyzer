@@ -1,128 +1,155 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import { getResumes } from "../../services/resumeService";
 import { createAnalysis } from "../../services/analysisService";
-
-import "../SystemPages.css";
+import "./Analysis.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Analysis() {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [resumes, setResumes] = useState([]);
     const [resumeId, setResumeId] = useState("");
     const [jobDescription, setJobDescription] = useState("");
-
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchResumes();
+        loadResumes();
+        if(location.state?.resumeId){
+
+        setResumeId(
+        location.state.resumeId
+        );
+
+        }
     }, []);
 
-    const fetchResumes = async () => {
+    const loadResumes = async () => {
+
         try {
+
             const data = await getResumes();
             setResumes(data);
 
-            if (data.length > 0) {
-                setResumeId(data[0].id);
-            }
-
         } catch (err) {
-            console.log(err);
+
+            console.error(err);
+            alert("Failed to load resumes.");
+
         }
+
     };
 
     const handleSubmit = async (e) => {
+
         e.preventDefault();
+
+        if (!resumeId) {
+            alert("Please select a resume.");
+            return;
+        }
+
+        if (jobDescription.trim().length < 30) {
+            alert("Job description must be at least 30 characters.");
+            return;
+        }
 
         try {
 
             setLoading(true);
 
-            const analysis = await createAnalysis({
+            const result = await createAnalysis({
                 resume_id: resumeId,
                 job_description: jobDescription,
             });
 
-            navigate(`/analysis/${analysis.id}`);
+            navigate(`/analysis/${result.id}`);
 
         } catch (err) {
 
-            console.log(err);
-
-            alert(
-                err.response?.data?.detail ||
-                "Analysis failed."
-            );
+            console.error(err);
+            alert("Analysis failed.");
 
         } finally {
 
             setLoading(false);
 
         }
+
     };
 
     return (
 
-        <div className="system-content">
+        <div className="dashboard">
 
-            <h1>Resume Analysis</h1>
+            <Sidebar />
 
-            <form onSubmit={handleSubmit}>
+            <main className="dashboard-content">
 
-                <label>Select Resume</label>
+                <div className="analysis-container">
 
-                <select
-                    value={resumeId}
-                    onChange={(e) =>
-                        setResumeId(e.target.value)
-                    }
-                >
+                    <h1>Resume Analysis</h1>
 
-                    {resumes.map((resume) => (
+                    <form onSubmit={handleSubmit}>
 
-                        <option
-                            key={resume.id}
-                            value={resume.id}
+                        <label>Select Resume</label>
+
+                        <select
+                            value={resumeId}
+                            onChange={(e) => setResumeId(e.target.value)}
+                            required
                         >
-                            {resume.title}
-                        </option>
 
-                    ))}
+                            <option value="">
+                                Choose Resume
+                            </option>
 
-                </select>
+                            {resumes.map((resume) => (
 
-                <br />
-                <br />
+                                <option
+                                    key={resume.id}
+                                    value={resume.id}
+                                >
+                                    {resume.title}
+                                </option>
 
-                <label>Job Description</label>
+                            ))}
 
-                <textarea
-                    rows="12"
-                    value={jobDescription}
-                    onChange={(e) =>
-                        setJobDescription(e.target.value)
-                    }
-                    placeholder="Paste Job Description..."
-                />
+                        </select>
 
-                <br />
-                <br />
+                        <label>Job Description</label>
 
-                <button disabled={loading}>
+                        <textarea
+                            rows="10"
+                            value={jobDescription}
+                            onChange={(e) =>
+                                setJobDescription(e.target.value)
+                            }
+                            placeholder="Paste complete Job Description..."
+                            required
+                        />
 
-                    {loading
-                        ? "Analyzing..."
-                        : "Analyze Resume"}
+                        <button
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading
+                                ? "Analyzing..."
+                                : "Analyze Resume"}
+                        </button>
 
-                </button>
+                    </form>
 
-            </form>
+                </div>
+
+            </main>
 
         </div>
 
     );
+
 }
 
 export default Analysis;

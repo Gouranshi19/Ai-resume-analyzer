@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
+import Sidebar from "../../components/Sidebar/Sidebar";
 import { uploadData } from "../../data/systemData";
 import "../SystemPages.css";
 
@@ -9,206 +10,233 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ACCEPTED_EXTENSIONS = ["pdf", "docx"];
 
 function UploadResume() {
-  const [title, setTitle] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [isDragging, setIsDragging] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+    const [title, setTitle] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [isDragging, setIsDragging] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
 
-  const fileInputRef = useRef(null);
-  const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const preventBrowserDrop = (event) => event.preventDefault();
+    useEffect(() => {
+        const preventBrowserDrop = (event) => event.preventDefault();
 
-    window.addEventListener("dragover", preventBrowserDrop);
-    window.addEventListener("drop", preventBrowserDrop);
+        window.addEventListener("dragover", preventBrowserDrop);
+        window.addEventListener("drop", preventBrowserDrop);
 
-    return () => {
-      window.removeEventListener("dragover", preventBrowserDrop);
-      window.removeEventListener("drop", preventBrowserDrop);
+        return () => {
+            window.removeEventListener("dragover", preventBrowserDrop);
+            window.removeEventListener("drop", preventBrowserDrop);
+        };
+    }, []);
+
+    const validateFile = (file) => {
+        const extension = file.name.split(".").pop()?.toLowerCase();
+
+        if (!ACCEPTED_EXTENSIONS.includes(extension)) {
+            return "Upload a PDF or DOCX file only.";
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+            return "File size should be less than 10 MB.";
+        }
+
+        return "";
     };
-  }, []);
 
-  function validateFile(file) {
-    const extension = file.name.split(".").pop()?.toLowerCase();
+    const selectFile = (file) => {
+        if (!file) return;
 
-    if (!ACCEPTED_EXTENSIONS.includes(extension)) {
-      return "Upload a PDF or DOCX file only.";
-    }
+        const validation = validateFile(file);
 
-    if (file.size > MAX_FILE_SIZE) {
-      return "The selected file must be 10 MB or smaller.";
-    }
+        if (validation) {
+            setError(validation);
+            setSelectedFile(null);
+            return;
+        }
 
-    return "";
-  }
+        setSelectedFile(file);
+        setError("");
+    };
 
-  function selectFile(file) {
-    if (!file) return;
+    const handleInputChange = (e) => {
+        selectFile(e.target.files?.[0]);
+    };
 
-    const validationError = validateFile(file);
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
 
-    if (validationError) {
-      setError(validationError);
-      setSelectedFile(null);
-      return;
-    }
+        selectFile(e.dataTransfer.files?.[0]);
+    };
 
-    setError("");
-    setSelectedFile(file);
-  }
+    const handleAnalyze = async () => {
 
-  function handleInputChange(event) {
-    selectFile(event.target.files?.[0]);
-  }
+        if (!title.trim()) {
+            setError("Please enter resume title.");
+            return;
+        }
 
-  function handleDrop(event) {
-    event.preventDefault();
-    setIsDragging(false);
-    selectFile(event.dataTransfer.files?.[0]);
-  }
+        if (!selectedFile) {
+            setError("Please select a resume.");
+            return;
+        }
 
-async function handleAnalyze() {
-  if (!selectedFile) {
-    setError("Please select a file.");
-    return;
-  }
+        try {
 
-  if (!title.trim()) {
-    setError("Please enter resume title.");
-    return;
-  }
+            setLoading(true);
+            setError("");
 
-  try {
-    setLoading(true);
-    setError("");
+            await uploadResume(title, selectedFile);
 
-    await uploadResume(title, selectedFile);
+            alert("Resume uploaded successfully.");
 
-    alert("Resume uploaded successfully!");
+            navigate("/resume-history");
 
-    navigate("/resume-history");
-  } catch (err) {
-    console.error(err);
+        } catch (err) {
 
-    if (err.response?.data) {
-      setError(JSON.stringify(err.response.data));
-    } else {
-      setError("Upload failed.");
-    }
-  } finally {
-    setLoading(false);
-  }
-}
+            console.error(err);
 
-  return (
-    <section className="system-content">
-      <div className="upload-layout">
-        <div className="upload-copy">
-          <p className="system-kicker">{uploadData.eyebrow}</p>
+            if (err.response?.data) {
+                setError(JSON.stringify(err.response.data));
+            } else {
+                setError("Upload failed.");
+            }
 
-          <h1>
-            {uploadData.title.split("\n").map((line) => (
-              <span key={line}>{line}</span>
-            ))}
-          </h1>
+        } finally {
 
-          <p>{uploadData.description}</p>
+            setLoading(false);
+
+        }
+    };
+
+    return (
+
+        <div className="dashboard">
+
+            <Sidebar />
+
+            <main className="dashboard-content">
+
+                <section className="system-content">
+
+                    <div className="upload-layout">
+
+                        <div className="upload-copy">
+
+                            <p className="system-kicker">
+                                {uploadData.eyebrow}
+                            </p>
+
+                            <h1>
+                                {uploadData.title.split("\n").map((line) => (
+                                    <span key={line}>{line}</span>
+                                ))}
+                            </h1>
+
+                            <p>{uploadData.description}</p>
+
+                        </div>
+
+                        <div className="upload-workspace">
+
+                            <input
+                                className="resume-title-input"
+                                type="text"
+                                placeholder="Resume Title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                className="upload-file-input"
+                                accept=".pdf,.docx"
+                                onChange={handleInputChange}
+                            />
+
+                            <div
+                                className={`drop-zone ${
+                                    isDragging ? "drop-zone--active" : ""
+                                } ${
+                                    selectedFile ? "drop-zone--selected" : ""
+                                }`}
+                                onClick={() => fileInputRef.current?.click()}
+                                onDragEnter={(e) => {
+                                    e.preventDefault();
+                                    setIsDragging(true);
+                                }}
+                                onDragLeave={(e) => {
+                                    e.preventDefault();
+                                    setIsDragging(false);
+                                }}
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={handleDrop}
+                            >
+
+                                <span>📄</span>
+
+                                <h2>
+                                    {selectedFile
+                                        ? selectedFile.name
+                                        : "Drop Resume Here"}
+                                </h2>
+
+                                <p>
+                                    {selectedFile
+                                        ? `${(
+                                              selectedFile.size /
+                                              1024 /
+                                              1024
+                                          ).toFixed(2)} MB`
+                                        : "PDF / DOCX (Max 10 MB)"}
+                                </p>
+
+                            </div>
+
+                            {error && (
+                                <p className="upload-error">
+                                    {error}
+                                </p>
+                            )}
+
+                            <div className="upload-options">
+
+                                {uploadData.options.map((option) => (
+
+                                    <article key={option.label}>
+
+                                        <span>{option.label}</span>
+
+                                        <b>{option.value}</b>
+
+                                    </article>
+
+                                ))}
+
+                            </div>
+
+                            <Button
+                                disabled={loading || !selectedFile}
+                                onClick={handleAnalyze}
+                            >
+                                {loading
+                                    ? "Uploading..."
+                                    : "Upload Resume"}
+                            </Button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+
         </div>
-
-        <div className="upload-workspace">
-
-          <input
-            type="text"
-            className="resume-title-input"
-            placeholder="Resume Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="upload-file-input"
-            accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            onChange={handleInputChange}
-          />
-
-          <div
-            className={`drop-zone${
-              isDragging ? " drop-zone--active" : ""
-            }${selectedFile ? " drop-zone--selected" : ""}`}
-            role="button"
-            tabIndex="0"
-            aria-label="Select Resume"
-
-            onClick={() => fileInputRef.current?.click()}
-
-            onDragEnter={(e) => {
-              e.preventDefault();
-              setIsDragging(true);
-            }}
-
-            onDragLeave={(e) => {
-              e.preventDefault();
-              setIsDragging(false);
-            }}
-
-            onDragOver={(e) => e.preventDefault()}
-
-            onDrop={handleDrop}
-
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                fileInputRef.current?.click();
-              }
-            }}
-          >
-            <span>♧</span>
-
-            <h2>
-              {selectedFile
-                ? selectedFile.name
-                : "DROP CV HERE OR SELECT FILE"}
-            </h2>
-
-            <p>
-              {selectedFile
-                ? `${(selectedFile.size / (1024 * 1024)).toFixed(
-                    2
-                  )} MB · READY`
-                : "Maximum 10MB · PDF / DOCX"}
-            </p>
-          </div>
-
-          {error && (
-            <p className="upload-error" role="alert">
-              {error}
-            </p>
-          )}
-
-          <div className="upload-options">
-            {uploadData.options.map((option) => (
-              <article key={option.label}>
-                <span>{option.label}</span>
-                <b>{option.value}</b>
-              </article>
-            ))}
-          </div>
-
-          <Button
-            disabled={!selectedFile || loading}
-            onClick={handleAnalyze}
-          >
-            {loading ? "Uploading..." : "Upload Resume"}
-          </Button>
-
-        </div>
-      </div>
-    </section>
-  );
+    );
 }
 
 export default UploadResume;

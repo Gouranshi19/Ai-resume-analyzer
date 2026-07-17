@@ -427,3 +427,118 @@
 .delete-btn:hover{
     background:#dc2626;
 }
+
+.resume-history{
+    width:100%;
+    padding:40px;
+    color:rgb(8, 5, 5);
+}
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.history-header h1{
+    font-size:34px;
+    margin-bottom:8px;
+}
+
+.history-header p{
+    color:#010128;
+}
+
+.upload-btn{
+    background:#7c3aed;
+    color:white;
+    border:none;
+    padding:12px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+    font-weight:600;
+}
+
+.upload-btn:hover{
+    background:#6d28d9;
+}
+
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    background:rgba(255,255,255,.05);
+    backdrop-filter:blur(12px);
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.history-table th{
+    background:#7c3aed;
+    color:white;
+    padding:18px;
+}
+
+.history-table td{
+    padding:18px;
+    border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.history-table tr:hover{
+    background:rgba(255,255,255,.06);
+}
+
+.history-table a{
+    color:#9d7dff;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.history-table a:hover{
+    text-decoration:underline;
+}
+
+.delete-btn{
+    background:#ef4444;
+    border:none;
+    color:white;
+    padding:8px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.delete-btn:hover{
+    background:#dc2626;
+}
+
+.history-table input{
+    padding:8px;
+    border-radius:8px;
+    border:none;
+    width:100%;
+}
+
+.empty-box{
+    text-align:center;
+    padding:70px;
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+}
+.analyze-btn{
+
+background:#111;
+color:white;
+border:none;
+padding:8px 18px;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+
+}
+
+.analyze-btn:hover{
+
+background:#ff4d1a;
+
+}

@@ -1,75 +1,146 @@
+.navbar {
+    width: 100%;
+    border-bottom: 2px solid #111;
+    background: #fff;
+    }
 
-.navbar{
-    width:100%;
-    border-bottom:2px solid #111;
-    background:#fff;
+    .nav-container {
+    width: 92%;
+    max-width: 1280px;
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 0;
+    }
+
+    .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    }
+
+    .logo-box {
+    width: 16px;
+    height: 16px;
+    background: #ff4d1a;
+    }
+
+    .logo span {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    }
+
+    .nav-links {
+    display: flex;
+    gap: 38px;
+    }
+
+    .nav-links a {
+    font-size: 13px;
+    font-weight: 700;
+    }
+
+    .nav-links a:hover {
+    color: #ff4d1a;
+    }
+
+    .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    }
+
+    .auth-buttons a {
+    font-size: 13px;
+    font-weight: 700;
+    }
+
+    .auth-buttons button {
+    background: #111;
+    color: #fff;
+    border: none;
+    padding: 12px 22px;
+    font-size: 12px;
+    font-weight: 700;
+    }
+
+    ﻿.navbar {
+    display: flex;
+    align-items: center;
+    min-height: 60px;
+    padding: 0 max(1.5rem, calc((100vw - 1200px) / 2));
+    border-bottom: 3px solid #050505;
+    color: #050505;
+    background: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    }
+    .navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+    }
+    .navbar__brand span {
+    width: 14px;
+    height: 22px;
+    background: #ff3517;
+    }
+    .navbar__links {
+    display: flex;
+    gap: 26px;
+    margin: 0 auto;
+    }
+    .navbar a {
+    line-height: 1;
+    }
+    .navbar a.active {
+    color: #ff3517;
+    }
+    .navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    }
+    .navbar__register {
+    padding: 11px 13px;
+    color: #fff;
+    background: #050505;
+    }
+    @media (max-width: 620px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 15px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .navbar__links {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .navbar__actions {
+        margin-left: auto;
+    }
 }
-
-.nav-container{
-    width:92%;
-    max-width:1280px;
-    margin:auto;
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:22px 0;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.logo-box{
-    width:16px;
-    height:16px;
-    background:#ff4d1a;
-}
-
-.logo span{
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:.8px;
-}
-
-.nav-links{
-    display:flex;
-    gap:38px;
-}
-
-.nav-links a{
-    font-size:13px;
-    font-weight:700;
-}
-
-.nav-links a:hover{
-    color:#ff4d1a;
-}
-
-.auth-buttons{
-    display:flex;
-    align-items:center;
-    gap:18px;
-}
-
-.auth-buttons a{
-    font-size:13px;
-    font-weight:700;
-}
-
-.auth-buttons button{
+.register-btn{
     background:#111;
     color:#fff;
     border:none;
     padding:12px 22px;
-    font-size:12px;
     font-weight:700;
+    cursor:pointer;
+    transition:.3s;
 }
 
-﻿.navbar { display: flex; align-items: center; min-height: 60px; padding: 0 max(1.5rem, calc((100vw - 1200px) / 2)); border-bottom: 3px solid #050505; color: #050505; background: #fff; font-size: 9px; font-weight: 800; text-transform: uppercase; }
-.navbar__brand { display: inline-flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 800; white-space: nowrap; }.navbar__brand span { width: 14px; height: 22px; background: #ff3517; }.navbar__links { display: flex; gap: 26px; margin: 0 auto; }.navbar a { line-height: 1; }.navbar a.active { color: #ff3517; }.navbar__actions { display: flex; align-items: center; gap: 14px; }.navbar__register { padding: 11px 13px; color: #fff; background: #050505; }
-@media (max-width: 620px) { .navbar { flex-wrap: wrap; gap: 15px; padding-top: 12px; padding-bottom: 12px; }.navbar__links { order: 3; width: 100%; justify-content: space-between; gap: 8px; }.navbar__actions { margin-left: auto; } }
-
+.register-btn:hover{
+    background:#ff4d1a;
+}

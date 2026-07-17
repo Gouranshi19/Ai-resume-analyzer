@@ -62,15 +62,6 @@ function App() {
   }
 />
 
-<Route
-  path="/analysis/:id"
-  element={
-    <ProtectedRoute>
-      <AnalysisResult />
-    </ProtectedRoute>
-  }
-/>
-
 </Routes>
   );
 }

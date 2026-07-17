@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 import {
     getResumes,
@@ -36,21 +37,17 @@ import {
     };
 
     const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-        "Delete this resume?"
-        );
+        const confirmDelete = window.confirm("Delete this resume?");
 
         if (!confirmDelete) return;
 
         try {
         await deleteResume(id);
 
-        setResumes((prev) =>
-            prev.filter((resume) => resume.id !== id)
-        );
+        setResumes((prev) => prev.filter((resume) => resume.id !== id));
         } catch (err) {
         console.error(err);
-        alert("Delete failed");
+        alert("Delete failed.");
         }
     };
 
@@ -64,151 +61,136 @@ import {
         const updated = await updateResume(id, newTitle);
 
         setResumes((prev) =>
-            prev.map((resume) =>
-            resume.id === id ? updated : resume
-            )
+            prev.map((resume) => (resume.id === id ? updated : resume)),
         );
 
         setEditingId(null);
         setNewTitle("");
         } catch (err) {
         console.error(err);
-        alert("Update failed");
+        alert("Update failed.");
         }
     };
 
     if (loading) {
-        return (
-        <div className="resume-history">
-            <h2>Loading...</h2>
-        </div>
-        );
+        return <h2 style={{ padding: "40px" }}>Loading...</h2>;
     }
 
     return (
-        <div className="resume-history">
+        <div className="dashboard">
+        <Sidebar />
 
-        <div className="history-header">
-            <div>
-            <h1>Resume History</h1>
-            <p>Your uploaded resumes.</p>
+        <main className="dashboard-content">
+            <div className="resume-history">
+            <div className="history-header">
+                <div>
+                <h1>Resume History</h1>
+
+                <p>Your uploaded resumes.</p>
+                </div>
+
+                <button
+                className="upload-btn"
+                onClick={() => navigate("/upload-resume")}
+                >
+                + Upload Resume
+                </button>
             </div>
 
-            <button
-            className="upload-btn"
-            onClick={() => navigate("/upload-resume")}
-            >
-            + Upload Resume
-            </button>
-        </div>
+            {error && <p className="error">{error}</p>}
 
-        {error && <p className="error">{error}</p>}
+            {resumes.length === 0 ? (
+                <div className="empty-box">
+                <h3>No resumes uploaded yet.</h3>
 
-        {resumes.length === 0 ? (
-            <div className="empty-box">
-            <h3>No resumes uploaded yet.</h3>
-            <p>Upload your first resume.</p>
+                <p>Upload your first resume.</p>
+                </div>
+            ) : (
+                <table className="history-table">
+                <thead>
+                    <tr>
+                    <th>Title</th>
+
+                    <th>Uploaded</th>
+
+                    <th>View</th>
+
+                    <th>Edit</th>
+
+                    <th>Analysis</th>
+
+                    <th>Delete</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {resumes.map((resume) => (
+                    <tr key={resume.id}>
+                        <td>
+                        {editingId === resume.id ? (
+                            <input
+                            value={newTitle}
+                            onChange={(e) => setNewTitle(e.target.value)}
+                            />
+                        ) : (
+                            resume.title
+                        )}
+                        </td>
+
+                        <td>{new Date(resume.uploaded_at).toLocaleString()}</td>
+
+                        <td>
+                        <a
+                            href={`http://127.0.0.1:8000${resume.file}`}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            View
+                        </a>
+                        </td>
+
+                        <td>
+                        {editingId === resume.id ? (
+                            <button onClick={() => saveEdit(resume.id)}>
+                            Save
+                            </button>
+                        ) : (
+                            <button onClick={() => startEdit(resume)}>Edit</button>
+                        )}
+                        </td>
+
+                        <td>
+
+    <button
+        className="analyze-btn"
+        onClick={() =>
+            navigate("/analysis", {
+                state: {
+                    resumeId: resume.id
+                }
+            })
+        }
+    >
+        Analyze
+    </button>
+
+</td>
+
+                        <td>
+                        <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(resume.id)}
+                        >
+                            Delete
+                        </button>
+                        </td>
+                    </tr>
+                    ))}
+                </tbody>
+                </table>
+            )}
             </div>
-        ) : (
-            <table className="history-table">
-
-            <thead>
-                <tr>
-                <th>Title</th>
-                <th>Uploaded</th>
-                <th>View</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                {resumes.map((resume) => (
-
-                <tr key={resume.id}>
-
-                    <td>
-
-                    {editingId === resume.id ? (
-
-                        <input
-                        value={newTitle}
-                        onChange={(e) =>
-                            setNewTitle(e.target.value)
-                        }
-                        />
-
-                    ) : (
-
-                        resume.title
-
-                    )}
-
-                    </td>
-
-                    <td>
-                    {new Date(
-                        resume.uploaded_at
-                    ).toLocaleString()}
-                    </td>
-
-                    <td>
-
-                    <a
-                        href={`http://127.0.0.1:8000${resume.file}`}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        View
-                    </a>
-
-                    </td>
-
-                    <td>
-
-                    {editingId === resume.id ? (
-
-                        <button
-                        onClick={() => saveEdit(resume.id)}
-                        >
-                        Save
-                        </button>
-
-                    ) : (
-
-                        <button
-                        onClick={() => startEdit(resume)}
-                        >
-                        Edit
-                        </button>
-
-                    )}
-
-                    </td>
-
-                    <td>
-
-                    <button
-                        className="delete-btn"
-                        onClick={() =>
-                        handleDelete(resume.id)
-                        }
-                    >
-                        Delete
-                    </button>
-
-                    </td>
-
-                </tr>
-
-                ))}
-
-            </tbody>
-
-            </table>
-        )}
-
+        </main>
         </div>
     );
 }

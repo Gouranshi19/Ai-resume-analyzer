@@ -74,3 +74,20 @@ class AnalysisDetailView(APIView):
         analysis = get_object_or_404(Analysis, pk=pk, user=request.user)
         serializer = AnalysisSerializer(analysis)
         return Response(serializer.data)
+    
+class DashboardStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        resumes = Resume.objects.filter(user=request.user)
+        analyses = Analysis.objects.filter(user=request.user)
+
+        latest_analysis = analyses.first()
+
+        data = {
+            "total_resumes": resumes.count(),
+            "total_analyses": analyses.count(),
+            "latest_score": latest_analysis.ats_score if latest_analysis else 0,
+        }
+
+        return Response(data)

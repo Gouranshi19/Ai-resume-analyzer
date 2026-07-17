@@ -8,8 +8,6 @@
     background: #f5f5f5;
     }
 
-    /* ================= SIDEBAR ================= */
-
     .sidebar {
     width: 260px;
     background: #111;
@@ -22,7 +20,8 @@
     margin-bottom: 45px;
     font-weight: 900;
     letter-spacing: 1px;
-    }
+    color: #ff4d1a;
+}
 
     .sidebar ul {
     list-style: none;
@@ -50,14 +49,10 @@
     color: #ff7b5a;
     }
 
-    /* ================= CONTENT ================= */
-
     .dashboard-content {
     flex: 1;
     padding: 40px;
     }
-
-    /* Header */
 
     .dashboard-header {
     display: flex;
@@ -89,8 +84,6 @@
     .dashboard-header button:hover {
     background: #ff4d1a;
     }
-
-    /* ================= STATS ================= */
 
     .stats {
     display: grid;
@@ -126,8 +119,6 @@
     color: white;
     }
 
-    /* ================= RECENT ================= */
-
     .recent h2 {
     margin-bottom: 25px;
     font-size: 28px;
@@ -154,8 +145,6 @@
     color: #111;
     }
 
-    /* ================= RESPONSIVE ================= */
-
     @media (max-width: 992px) {
 
     .dashboard {
@@ -176,4 +165,116 @@
         gap: 20px;
     }
 
+}
+
+.quick-actions{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+margin-bottom:40px;
+}
+
+.action-card{
+background:#fff;
+padding:28px;
+border-radius:16px;
+cursor:pointer;
+border:2px solid transparent;
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.action-card:hover{
+transform:translateY(-6px);
+border-color:#ff5a1f;
+}
+
+.action-card h3{
+margin-bottom:12px;
+font-size:22px;
+color:#111;
+}
+
+.action-card p{
+color:#666;
+line-height:1.6;
+}
+
+@media(max-width:900px){
+
+.quick-actions{
+grid-template-columns:1fr;
+}
+
+}
+
+.analysis-badge{
+display:inline-block;
+margin:15px 0;
+padding:8px 18px;
+background:#ff5a1f;
+color:#fff;
+font-weight:700;
+border-radius:30px;
+}
+
+.analysis-date{
+color:#777;
+margin-bottom:18px;
+}
+
+.view-report-btn{
+background:#111;
+color:#fff;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.view-report-btn:hover{
+background:#ff5a1f;
+}
+.quick-actions{
+    margin:45px 0;
+}
+
+.quick-actions h2{
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.action-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.action-card{
+    background:#fff;
+    border:2px solid #111;
+    padding:25px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.action-card:hover{
+    background:#ff4d1a;
+    color:#fff;
+    transform:translateY(-5px);
+}
+
+.action-card h3{
+    margin-bottom:10px;
+}
+
+.action-card p{
+    color:#666;
+    line-height:1.5;
+}
+
+.action-card:hover p{
+    color:#fff;
 }
