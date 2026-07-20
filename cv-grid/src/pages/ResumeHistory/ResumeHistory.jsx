@@ -141,7 +141,7 @@ import {
 
                         <td>
                         <a
-                            href={`http://127.0.0.1:8000${resume.file}`}
+                            href={`${import.meta.env.VITE_API_URL.replace("/api", "")}${resume.file}`}
                             target="_blank"
                             rel="noreferrer"
                         >
