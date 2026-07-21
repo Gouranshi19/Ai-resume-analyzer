@@ -44,32 +44,28 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = LoginSerializer(data=request.data, context={"request": request})
-        serializer.is_valid(raise_exception=True)
-        return Response(token_response(serializer.validated_data["user"]))
-
-
-class LogoutView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        refresh_token = request.data.get("refresh")
-        if not refresh_token:
-            return Response(
-                {"refresh": ["This field is required."]},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         try:
-            RefreshToken(refresh_token).blacklist()
-        except TokenError:
-            return Response(
-                {"refresh": ["Token is invalid or expired."]},
-                status=status.HTTP_400_BAD_REQUEST,
+            print("REQUEST:", request.data)
+
+            serializer = LoginSerializer(
+                data=request.data,
+                context={"request": request},
             )
 
-        return Response(status=status.HTTP_205_RESET_CONTENT)
-    
+            serializer.is_valid(raise_exception=True)
+            print("Serializer OK")
+
+            user = serializer.validated_data["user"]
+            print("User:", user.username)
+
+            tokens = token_response(user)
+            print("Tokens created")
+
+            return Response(tokens)
+
+        except Exception as e:
+            print("LOGIN ERROR:", repr(e))
+            raise
 User = get_user_model()
 
 
