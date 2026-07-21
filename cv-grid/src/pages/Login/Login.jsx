@@ -141,12 +141,18 @@ const handleGoogleLogin = async (credentialResponse) => {
             </button>
 
             <div style={{ marginTop: "20px" }}>
-                <GoogleLogin
-                    onSuccess={handleGoogleLogin}
-                    onError={() => {
-                        setError("Google Login Failed");
-                    }}
-                />
+            <GoogleLogin
+    theme="outline"
+    size="large"
+    text="signin_with"
+    shape="rectangular"
+    width="300"
+    onSuccess={handleGoogleLogin}
+    onError={() => {
+        console.log("Google Login Error");
+        setError("Google Login Failed");
+    }}
+/>
             </div>
 
         </form>
