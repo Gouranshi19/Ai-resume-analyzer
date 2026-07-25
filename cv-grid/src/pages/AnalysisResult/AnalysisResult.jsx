@@ -4,6 +4,7 @@ import { getAnalysisDetail } from "../../services/analysisService";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import "./AnalysisResult.css";
 
+
 function AnalysisResult() {
   const { id } = useParams();
   const navigate = useNavigate();

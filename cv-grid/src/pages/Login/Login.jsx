@@ -57,25 +57,34 @@ const handleGoogleLogin = async (credentialResponse) => {
 
     try {
 
-        const res = await axios.post(
+const res = await axios.post(
     `${import.meta.env.VITE_API_URL}/auth/google/`,
     {
         token: credentialResponse.credential,
     }
 );
 
-        localStorage.setItem("access", res.data.access);
-        localStorage.setItem("refresh", res.data.refresh);
+console.log("Google Response:", res.data);
 
-        navigate("/dashboard");
+localStorage.setItem("access", res.data.access);
+localStorage.setItem("refresh", res.data.refresh);
 
-    } catch (err) {
+console.log("Access:", localStorage.getItem("access"));
+console.log("Refresh:", localStorage.getItem("refresh"));
 
-        console.log(err);
+navigate("/dashboard");
 
-        setError("Google Login Failed");
+    }  catch (err) {
 
-    }
+    console.log("FULL ERROR", err);
+
+    console.log(err.response);
+
+    console.log(err.response?.data);
+
+    setError(err.response?.data?.error || "Google Login Failed");
+
+}
 
 };
 

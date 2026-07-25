@@ -63,7 +63,7 @@ function App() {
 />
 
 <Route
-  path="/analysis-result"
+  path="/analysis/:id"
   element={
     <ProtectedRoute>
       <AnalysisResult />
