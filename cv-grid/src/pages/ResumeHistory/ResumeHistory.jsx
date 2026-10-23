@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/Sidebar/Sidebar";
 
@@ -19,22 +19,24 @@ import {
 
     const [editingId, setEditingId] = useState(null);
     const [newTitle, setNewTitle] = useState("");
+    const apiOrigin = (import.meta.env.VITE_API_URL || "").replace(/\/api\/?$/, "");
 
-    useEffect(() => {
-        fetchResumes();
+    const fetchResumes = useCallback(async () => {
+        try {
+            const data = await getResumes();
+            setResumes(data);
+        } catch {
+            setError("Failed to load resumes.");
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
-    const fetchResumes = async () => {
-        try {
-        const data = await getResumes();
-        setResumes(data);
-        } catch (err) {
-        console.error(err);
-        setError("Failed to load resumes.");
-        } finally {
-        setLoading(false);
-        }
-    };
+    useEffect(() => {
+        // This starts an async API request; state updates happen after the request resolves.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchResumes();
+    }, [fetchResumes]);
 
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Delete this resume?");
@@ -141,7 +143,7 @@ import {
 
                         <td>
                         <a
-                            href={`${import.meta.env.VITE_API_URL.replace("/api", "")}${resume.file}`}
+                            href={`${apiOrigin}${resume.file}`}
                             target="_blank"
                             rel="noreferrer"
                         >

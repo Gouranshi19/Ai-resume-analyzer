@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import "./Login.css";
@@ -41,7 +41,6 @@ export default function Login() {
         navigate("/dashboard");
 
     } catch (err) {
-        console.error(err);
 
         if (err.response?.data?.detail) {
             setError(err.response.data.detail);
@@ -64,23 +63,12 @@ const res = await axios.post(
     }
 );
 
-console.log("Google Response:", res.data);
-
 localStorage.setItem("access", res.data.access);
 localStorage.setItem("refresh", res.data.refresh);
-
-console.log("Access:", localStorage.getItem("access"));
-console.log("Refresh:", localStorage.getItem("refresh"));
 
 navigate("/dashboard");
 
     }  catch (err) {
-
-    console.log("FULL ERROR", err);
-
-    console.log(err.response);
-
-    console.log(err.response?.data);
 
     setError(err.response?.data?.error || "Google Login Failed");
 
@@ -158,7 +146,6 @@ navigate("/dashboard");
     width="300"
     onSuccess={handleGoogleLogin}
     onError={() => {
-        console.log("Google Login Error");
         setError("Google Login Failed");
     }}
 />

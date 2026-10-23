@@ -36,18 +36,6 @@ class AnalysisCreateListView(APIView):
 
         match_result = match_keywords(resume_text, job_description)
 
-        try:
-            ai_suggestions = get_ai_suggestions(
-                resume_text=resume_text,
-                job_description=job_description,
-                ats_score=match_result["ats_score"],
-                matched_keywords=match_result["matched_keywords"],
-                missing_keywords=match_result["missing_keywords"],
-            )
-        except GeminiError as exc:
-            # Keyword score is still useful even if the AI call fails
-            ai_suggestions = f"AI suggestions unavailable right now: {exc}"
-
         analysis = Analysis.objects.create(
             user=request.user,
             resume=resume,
@@ -55,7 +43,7 @@ class AnalysisCreateListView(APIView):
             ats_score=match_result["ats_score"],
             matched_keywords=match_result["matched_keywords"],
             missing_keywords=match_result["missing_keywords"],
-            ai_suggestions=ai_suggestions,
+            ai_suggestions="Generating AI suggestions...",
         )
 
         serializer = AnalysisSerializer(analysis)
@@ -74,6 +62,28 @@ class AnalysisDetailView(APIView):
         analysis = get_object_or_404(Analysis, pk=pk, user=request.user)
         serializer = AnalysisSerializer(analysis)
         return Response(serializer.data)
+
+
+class AnalysisSuggestionsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        analysis = get_object_or_404(Analysis, pk=pk, user=request.user)
+
+        try:
+            resume_text = extract_resume_text(analysis.resume)
+            analysis.ai_suggestions = get_ai_suggestions(
+                resume_text=resume_text,
+                job_description=analysis.job_description,
+                ats_score=analysis.ats_score,
+                matched_keywords=analysis.matched_keywords,
+                missing_keywords=analysis.missing_keywords,
+            )
+        except (GeminiError, TextExtractionError) as exc:
+            analysis.ai_suggestions = f"AI suggestions unavailable right now: {exc}"
+
+        analysis.save(update_fields=["ai_suggestions"])
+        return Response(AnalysisSerializer(analysis).data)
     
 class DashboardStatsView(APIView):
     permission_classes = [IsAuthenticated]

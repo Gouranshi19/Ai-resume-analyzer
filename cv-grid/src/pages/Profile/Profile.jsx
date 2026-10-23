@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getCurrentUser } from "../../services/authService";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import "./Profile.css";
@@ -6,18 +6,20 @@ import "./Profile.css";
 function Profile() {
     const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        loadUser();
+    const loadUser = useCallback(async () => {
+        try {
+            const data = await getCurrentUser();
+            setUser(data);
+        } catch {
+            // Keep the profile page available if the user details cannot load.
+        }
     }, []);
 
-    const loadUser = async () => {
-        try {
-        const data = await getCurrentUser();
-        setUser(data);
-        } catch (err) {
-        console.log(err);
-        }
-    };
+    useEffect(() => {
+        // This starts an async API request; state updates happen after the request resolves.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        loadUser();
+    }, [loadUser]);
 
     return (
         <div className="dashboard">

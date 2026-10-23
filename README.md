@@ -10,9 +10,9 @@ An AI-powered resume analyzer that provides ATS scoring, keyword analysis, and i
 
 **AI:** Google Gemini API
 
-**Auth:** JWT + Auth0 + Google SSO
+**Auth:** JWT + Google SSO
 
-**Database:** To Be Finalized (PostgreSQL/MySQL)
+**Database:** PostgreSQL
 
 
 ---
@@ -93,7 +93,7 @@ git clone <repo>
 
 ### 2. Go to backend
 
-cd backend
+cd cv-insight-ai
 
 ### 3. Create virtual environment
 
@@ -121,6 +121,15 @@ to
 
 .env
 
+Create a Gemini API key in [Google AI Studio](https://aistudio.google.com/app/apikey) and set it in the backend `.env` file:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-3.5-flash-lite
+```
+
+Keep this key on the backend; do not put it in the frontend's `cv-grid/.env` or commit it to source control. Restart Django after adding the key.
+
 ### 7. Configure PostgreSQL
 
 DB_NAME=cv_insight_db
@@ -132,3 +141,22 @@ python manage.py migrate
 ### 9. Start server
 
 python manage.py runserver
+
+
+## Frontend Setup
+
+From the repository root, configure `cv-grid/.env` using `cv-grid/.env.example`, install frontend dependencies, and run the Vite development server:
+
+```sh
+cd cv-grid
+npm install
+npm run dev
+```
+
+Set `VITE_API_URL` to the backend API base URL ending in `/api` and set `VITE_GOOGLE_CLIENT_ID` to the same Google OAuth client ID configured in the backend. These values are embedded in the public frontend bundle; never place `GEMINI_API_KEY` or other server secrets in frontend environment variables.
+
+## Deployment Configuration
+
+Deploy the Django API and Vite frontend as separate services. Set `DEBUG=False` on the backend, generate a unique `SECRET_KEY`, configure `ALLOWED_HOSTS` with backend hostnames, and set `CORS_ALLOWED_ORIGINS` and `CSRF_TRUSTED_ORIGINS` to the HTTPS frontend origin. Provide PostgreSQL connection values, `GOOGLE_CLIENT_ID`, and `GEMINI_API_KEY` in the backend service environment. Set the frontend build variables `VITE_API_URL` and `VITE_GOOGLE_CLIENT_ID` in its hosting provider. The backend defaults to HTTPS redirects, secure cookies, and one year of HSTS when `DEBUG=False`; if TLS terminates at a trusted reverse proxy, configure `TRUST_PROXY_SSL=True` only when that proxy sets `X-Forwarded-Proto` safely.
+
+Run `python manage.py migrate` during release and serve `staticfiles/` through the host or a static-file middleware. Uploaded resumes are stored under `MEDIA_ROOT`; configure persistent or object storage before deploying to an ephemeral filesystem, since local uploads otherwise may be lost on restart. The Vercel rewrite in `cv-grid/vercel.json` supports client-side routes.

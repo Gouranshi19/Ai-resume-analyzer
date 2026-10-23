@@ -1,11 +1,10 @@
-﻿from rest_framework import status
+from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -44,32 +43,13 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        try:
-            print("STEP 1", request.data)
-
-            serializer = LoginSerializer(
-                data=request.data,
-                context={"request": request},
-            )
-
-            serializer.is_valid(raise_exception=True)
-            print("STEP 2")
-
-            user = serializer.validated_data["user"]
-            print("STEP 3", user.username)
-
-            response = token_response(user)
-            print("STEP 4")
-
-            return Response(response)
-
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            return Response(
-                {"error": str(e)},
-                status=500,
-            )
+        serializer = LoginSerializer(
+            data=request.data,
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data["user"]
+        return Response(token_response(user))
 
 class LogoutView(APIView):
     permission_classes = [AllowAny]
@@ -143,9 +123,8 @@ class GoogleLoginView(APIView):
 
             return Response(token_response(user))
 
-        except Exception as e:
-
+        except Exception:
             return Response(
-                {"error": str(e)},
+                {"error": "Google sign-in could not be completed."},
                 status=status.HTTP_400_BAD_REQUEST,
             )

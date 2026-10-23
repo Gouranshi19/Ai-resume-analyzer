@@ -1,5 +1,5 @@
-﻿import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
 import { getCurrentUser } from "../../services/authService";
 import { getResumes } from "../../services/resumeService";
 import { getAnalysisHistory } from "../../services/analysisService";
@@ -18,11 +18,7 @@ export default function Dashboard() {
 
     const [recentAnalyses, setRecentAnalyses] = useState([]);
 
-    useEffect(() => {
-        loadDashboard();
-    }, []);
-
-    const loadDashboard = async () => {
+    const loadDashboard = useCallback(async () => {
         try {
             const userData = await getCurrentUser();
             setUser(userData);
@@ -45,8 +41,8 @@ export default function Dashboard() {
 
             setRecentAnalyses(analyses.slice(0, 3));
 
-        } catch (err) {
-            console.log(err);
+        } catch {
+            // Authentication or API failure: return to sign in.
 
             localStorage.removeItem("access");
             localStorage.removeItem("refresh");
@@ -55,7 +51,14 @@ export default function Dashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [navigate]);
+
+
+    useEffect(() => {
+        // This starts async API requests; state updates happen after they resolve.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        loadDashboard();
+    }, [loadDashboard]);
 
     if (loading) {
         return <h2 style={{ padding: "40px" }}>Loading...</h2>;

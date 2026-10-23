@@ -1,11 +1,9 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "../Button/Button";
-import { loginUser, registerUser } from "../../services/authService";
 import "./AuthForm.css";
 
 function AuthForm({ config }) {
-  const navigate = useNavigate();
   const [errors, setErrors] = useState({})
   function handleSubmit(event) {
     event.preventDefault();

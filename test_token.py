@@ -1,15 +1,7 @@
-import time
-from jose import jwt
+"""Legacy local token helper. It is not a Django test module."""
 
-payload = {
-    "sub": "google-oauth2|testuser123",
-    "email": "testuser@gmail.com",
-    "name": "Test User",
-    "exp": int(time.time()) + 3600,
-    "iss": "https://dev-kiloo1125bd5ycvu.us.auth0.com/",
-    "aud": "https://cv-insight-api"
-}
-
-token = jwt.encode(payload, 'secret', algorithm='HS256')
-print("BEARER TOKEN IS:")
-print(f"Bearer {token}")
+if __name__ == "__main__":
+    raise SystemExit(
+        "This legacy Auth0 token generator is not valid for the app?s JWT authentication. "
+        "Use the /api/auth/login/ endpoint to obtain a development token."
+    )

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { getResumes } from "../../services/resumeService";
 import { createAnalysis } from "../../services/analysisService";
@@ -11,36 +11,24 @@ function Analysis() {
     const location = useLocation();
 
     const [resumes, setResumes] = useState([]);
-    const [resumeId, setResumeId] = useState("");
+    const [resumeId, setResumeId] = useState(() => String(location.state?.resumeId || ""));
     const [jobDescription, setJobDescription] = useState("");
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        loadResumes();
-        if(location.state?.resumeId){
-
-        setResumeId(
-        location.state.resumeId
-        );
-
+    const loadResumes = useCallback(async () => {
+        try {
+            const data = await getResumes();
+            setResumes(data);
+        } catch {
+            alert("Failed to load resumes.");
         }
     }, []);
 
-    const loadResumes = async () => {
-
-        try {
-
-            const data = await getResumes();
-            setResumes(data);
-
-        } catch (err) {
-
-            console.error(err);
-            alert("Failed to load resumes.");
-
-        }
-
-    };
+    useEffect(() => {
+        // This starts an async API request; state updates happen after the request resolves.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        loadResumes();
+    }, [loadResumes]);
 
     const handleSubmit = async (e) => {
 

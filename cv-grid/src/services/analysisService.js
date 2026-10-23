@@ -10,6 +10,11 @@ export const getAnalysisDetail = async (id) => {
     return response.data;
 };
 
+export const generateAnalysisSuggestions = async (id) => {
+    const response = await api.post(`/analysis/${id}/suggestions/`);
+    return response.data;
+};
+
 export const getAnalysisHistory = async () => {
     const response = await api.get("/analysis/");
     return response.data;

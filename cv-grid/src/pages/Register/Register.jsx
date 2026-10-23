@@ -28,8 +28,6 @@ export default function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Button Clicked");
-        console.log("Form Data:", formData);
 
         if (
         !formData.username ||
@@ -37,51 +35,39 @@ export default function Register() {
         !formData.password ||
         !formData.confirmPassword
         ) {
-        console.log("Validation Failed: Empty Fields");
         setError("Please fill all fields.");
         return;
         }
 
         if (formData.password !== formData.confirmPassword) {
-        console.log("Validation Failed: Passwords do not match");
         setError("Passwords do not match.");
         return;
         }
 
         try {
-        console.log("Inside Try Block");
 
         setLoading(true);
 
-        const response = await registerUser({
+        await registerUser({
             username: formData.username,
             email: formData.email,
             password: formData.password,
             confirm_password: formData.confirmPassword,
         });
 
-        console.log("API Success");
-        console.log(response);
 
         alert("Registration Successful!");
 
         navigate("/login");
         } catch (err) {
-        console.log("===== ERROR =====");
-        console.log(err);
-        console.log("Status:", err.response?.status);
-        console.log("Data:", err.response?.data);
-        console.log("Message:", err.message);
-        console.log("Config:", err.config);
 
         setError(
             err.response?.data
             ? JSON.stringify(err.response.data)
-            : err.message
+            : "Registration failed. Please try again."
         );
         } finally {
         setLoading(false);
-        console.log("Request Finished");
         }
     };
 
