@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -73,6 +75,7 @@ class LogoutView(APIView):
         return Response(status=status.HTTP_205_RESET_CONTENT)
     
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 
 class GoogleLoginView(APIView):
@@ -86,6 +89,13 @@ class GoogleLoginView(APIView):
             return Response(
                 {"error": "Token is required"},
                 status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if not settings.GOOGLE_CLIENT_ID:
+            logger.error("Google sign-in is unavailable: GOOGLE_CLIENT_ID is not configured.")
+            return Response(
+                {"error": "Google sign-in is not configured on the server."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
             )
 
         try:
@@ -123,8 +133,14 @@ class GoogleLoginView(APIView):
 
             return Response(token_response(user))
 
-        except Exception:
+        except ValueError:
             return Response(
-                {"error": "Google sign-in could not be completed."},
+                {"error": "Google rejected the credential. Check that frontend and backend use the same OAuth client ID."},
                 status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Exception:
+            logger.exception("Unexpected error while completing Google sign-in.")
+            return Response(
+                {"error": "The server could not complete Google sign-in. Check the API server logs."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )

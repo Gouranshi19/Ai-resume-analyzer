@@ -69,8 +69,16 @@ localStorage.setItem("refresh", res.data.refresh);
 navigate("/dashboard");
 
     }  catch (err) {
-
-    setError(err.response?.data?.error || "Google Login Failed");
+        if (err.response) {
+            setError(
+                err.response.data?.error ||
+                `Google sign-in API failed (${err.response.status}). Check the backend response.`
+            );
+        } else if (err.request) {
+            setError("Could not reach the sign-in API. Check its URL and CORS settings.");
+        } else {
+            setError(err.message || "Google sign-in could not be completed.");
+        }
 
 }
 
@@ -146,7 +154,7 @@ navigate("/dashboard");
     width="300"
     onSuccess={handleGoogleLogin}
     onError={() => {
-        setError("Google Login Failed");
+        setError("Google rejected sign-in before it reached the app. Check the OAuth client and authorized origin.");
     }}
 />
             </div>
